@@ -1,0 +1,21 @@
+---
+Name: debian-mirror-hostname
+Description: Sets the Debian Mirror Hostname to use.
+Documentation: |
+  Apparently with Debian Buster (10.0.0) and newer, the network
+  preseed file now requires the Mirror to be set, along with the
+  mirror directory path.  This Param allows the operator to specify
+  which mirror to use.
+
+  If no value is set, the default of ``mirrors.edge.kernel.org``
+  will be used.
+
+Meta:
+  color: blue
+  icon: server
+  title: Digital Rebar Community Content
+ReadOnly: true
+Schema:
+  default: mirrors.edge.kernel.org
+  type: string
+Secure: false

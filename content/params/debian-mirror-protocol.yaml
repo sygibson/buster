@@ -1,0 +1,20 @@
+---
+Name: debian-mirror-protocol
+Description: Sets the Debian Mirror Protocol to use.
+Documentation: |
+  Apparently with Debian Buster (10.0.0) and newer, the network
+  preseed file now requires the Mirror info to be set, along with the
+  mirror protocol to use.  This Param allows the operator to specify
+  which protocol to use.
+
+  If no value is set, the default of ``https`` will be used.
+
+Meta:
+  color: blue
+  icon: server
+  title: Digital Rebar Community Content
+ReadOnly: true
+Schema:
+  default: https
+  type: string
+Secure: false

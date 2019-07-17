@@ -1,0 +1,21 @@
+---
+Name: debian-mirror-directory
+Description: Sets the Debian Mirror Directory path to use.
+Documentation: |
+  Apparently with Debian Buster (10.0.0) and newer, the network
+  preseed file now requires the Mirror to be set, along with the
+  mirror directory path.  This Param allows the operator to specify
+  which mirror directory path part to use.
+
+  If no value is set, the default of ``/debian``
+  will be used.
+
+Meta:
+  color: blue
+  icon: server
+  title: Digital Rebar Community Content
+ReadOnly: true
+Schema:
+  default: /debian
+  type: string
+Secure: false
