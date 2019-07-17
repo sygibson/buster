@@ -1,0 +1,374 @@
+meta:
+  Author: ""
+  CodeSource: ""
+  Color: ""
+  Copyright: ""
+  Description: ""
+  DisplayName: ""
+  DocUrl: ""
+  Documentation: |-
+    Debian 10 (buster).  REMOVE THIS CONTENT PACK once Digital Rebar
+    Community Content is updated.  You must remove this prior to updating
+    the DRP CC content pack.
+  Icon: ""
+  License: ""
+  Name: debian-10-install
+  Order: ""
+  Prerequisites: ""
+  RequiredFeatures: ""
+  Source: ""
+  Tags: ""
+  Type: dynamic
+  Version: v0.0.0
+sections:
+  bootenvs:
+    debian-10-install:
+      Available: false
+      BootParams: priority=critical console-tools/archs=at console-setup/charmap=UTF-8
+        console-keymaps-at/keymap=us popularity-contest/participate=false passwd/root-login=false
+        keyboard-configuration/xkb-keymap=us netcfg/get_domain=unassigned-domain console-setup/ask_detect=false
+        debian-installer/locale=en_US.utf8 console-setup/layoutcode=us keyboard-configuration/layoutcode=us
+        netcfg/dhcp_timeout=120 netcfg/choose_interface=auto url={{.Machine.Url}}/seed
+        netcfg/get_hostname={{.Machine.Name}} root=/dev/ram rw quiet {{if .ParamExists
+        "kernel-options"}}{{.Param "kernel-options"}}{{end}} {{if .ParamExists "kernel-console"}}{{.Param
+        "kernel-console"}}{{end}}
+      Bundle: ""
+      Description: Debian 10 (buster) install BootEnv
+      Documentation: |
+        This BootEnv installs Debian 10 via the mini ISO file.
+      Endpoint: ""
+      Errors: []
+      Initrds:
+      - initrd.gz
+      Kernel: linux
+      Meta:
+        color: black
+        feature-flags: change-stage-v2
+        icon: linux
+        title: Digital Rebar Community Content
+      Name: debian-10-install
+      OS:
+        Codename: buster
+        Family: debian
+        IsoFile: mini.iso
+        IsoSha256: 20247e068b1edf5b3bfefff6f0cb7073ca48e56c4adba241429cf4f49dddd489
+        IsoUrl: https://mirrors.edge.kernel.org/debian/dists/buster/main/installer-amd64/current/images/netboot/mini.iso
+        Name: debian-10
+        SupportedArchitectures: {}
+        Version: 10.0.0
+      OnlyUnknown: false
+      OptionalParams:
+      - part-scheme
+      - operating-system-disk
+      - provisioner-default-user
+      - provisioner-default-fullname
+      - provisioner-default-uid
+      - provisioner-default-password-hash
+      - kernel-console
+      - kernel-options
+      - proxy-servers
+      - dns-domain
+      - local-repo
+      - proxy-servers
+      - ntp-servers
+      - select-kickseed
+      ReadOnly: false
+      RequiredParams: null
+      Templates:
+      - Contents: ""
+        ID: kexec.tmpl
+        Meta: null
+        Name: kexec
+        Path: '{{.Machine.Path}}/kexec'
+      - Contents: ""
+        ID: default-pxelinux.tmpl
+        Meta: null
+        Name: pxelinux
+        Path: pxelinux.cfg/{{.Machine.HexAddress}}
+      - Contents: ""
+        ID: default-ipxe.tmpl
+        Meta: null
+        Name: ipxe
+        Path: '{{.Machine.Address}}.ipxe'
+      - Contents: ""
+        ID: default-pxelinux.tmpl
+        Meta: null
+        Name: pxelinux-mac
+        Path: pxelinux.cfg/{{.Machine.MacAddr "pxelinux"}}
+      - Contents: ""
+        ID: default-ipxe.tmpl
+        Meta: null
+        Name: ipxe-mac
+        Path: '{{.Machine.MacAddr "ipxe"}}.ipxe'
+      - Contents: ""
+        ID: select-kickseed.tmpl
+        Meta: null
+        Name: seed
+        Path: '{{.Machine.Path}}/seed'
+      - Contents: ""
+        ID: net-post-install.sh.tmpl
+        Meta: null
+        Name: net-post-install.sh
+        Path: '{{.Machine.Path}}/post-install.sh'
+      Validated: false
+  params:
+    debian-mirror-directory:
+      Available: false
+      Bundle: ""
+      Description: Sets the Debian Mirror Directory path to use.
+      Documentation: |
+        Apparently with Debian Buster (10.0.0) and newer, the network
+        preseed file now requires the Mirror to be set, along with the
+        mirror directory path.  This Param allows the operator to specify
+        which mirror directory path part to use.
+
+        If no value is set, the default of ``/debian``
+        will be used.
+      Endpoint: ""
+      Errors: []
+      Meta:
+        color: blue
+        icon: server
+        title: Digital Rebar Community Content
+      Name: debian-mirror-directory
+      ReadOnly: true
+      Schema:
+        default: /debian
+        type: string
+      Secure: false
+      Validated: false
+    debian-mirror-hostname:
+      Available: false
+      Bundle: ""
+      Description: Sets the Debian Mirror Hostname to use.
+      Documentation: |
+        Apparently with Debian Buster (10.0.0) and newer, the network
+        preseed file now requires the Mirror to be set, along with the
+        mirror directory path.  This Param allows the operator to specify
+        which mirror to use.
+
+        If no value is set, the default of ``mirrors.edge.kernel.org``
+        will be used.
+      Endpoint: ""
+      Errors: []
+      Meta:
+        color: blue
+        icon: server
+        title: Digital Rebar Community Content
+      Name: debian-mirror-hostname
+      ReadOnly: true
+      Schema:
+        default: mirrors.edge.kernel.org
+        type: string
+      Secure: false
+      Validated: false
+    debian-mirror-protocol:
+      Available: false
+      Bundle: ""
+      Description: Sets the Debian Mirror Protocol to use.
+      Documentation: |
+        Apparently with Debian Buster (10.0.0) and newer, the network
+        preseed file now requires the Mirror info to be set, along with the
+        mirror protocol to use.  This Param allows the operator to specify
+        which protocol to use.
+
+        If no value is set, the default of ``https`` will be used.
+      Endpoint: ""
+      Errors: []
+      Meta:
+        color: blue
+        icon: server
+        title: Digital Rebar Community Content
+      Name: debian-mirror-protocol
+      ReadOnly: true
+      Schema:
+        default: https
+        type: string
+      Secure: false
+      Validated: false
+  stages:
+    debian-10-install:
+      Available: false
+      BootEnv: debian-10-install
+      Bundle: ""
+      Description: Debian 10 (buster) install stage.  References the latest Debian
+        10 image
+      Documentation: ""
+      Endpoint: ""
+      Errors: []
+      Meta:
+        color: yellow
+        icon: download
+        title: Digital Rebar Community Content
+      Name: debian-10-install
+      OptionalParams: []
+      Params: {}
+      Partial: false
+      Profiles: []
+      ReadOnly: false
+      Reboot: false
+      RequiredParams: []
+      RunnerWait: false
+      Tasks:
+      - ubuntu-drp-only-repos
+      - ssh-access
+      Templates: []
+      Validated: false
+  templates:
+    net-seed-buster.tmpl:
+      Available: false
+      Bundle: ""
+      Contents: |+
+        # Rebar seed file for Debian/Ubuntu installs
+        # Locale and Language Settings
+        d-i debian-installer/locale string en_US.UTF-8
+        d-i console-setup/ask_detect boolean false
+        d-i console-setup/layoutcode string us
+        d-i keyboard-configuration/xkb-keymap select us
+        d-i debian-installer/locale string en_US.UTF-8
+        d-i console-tools/archs select at
+        d-i console-keymaps-at/keymap select American English
+        d-i debian-installer/keymap string us
+        d-i keyboard-configuration/toggle select No toggling
+
+        # Serial Console
+        d-i debian-installer/serial-console boolean true
+        d-i finish-install/keep-consoles boolean true
+
+        # Network Configuration
+        d-i netcfg/choose_interface select auto
+        d-i netcfg/dhcp_timeout string 120
+        d-i netcfg/get_hostname string {{.Machine.ShortName}}
+        {{if .ParamExists "dns-domain" -}}
+        d-i netcfg/get_domain string {{.Param "dns-domain"}}
+        {{end}}
+
+        #TODO - SYG - appears these mirror directives do not address the requirement
+        #             to set the mirror and directory info interactively in the installer
+        {{if (and (eq "debian" .Env.OS.Family)  (ge "10.0.0" .Env.OS.Version)) -}}
+        d-i mirror/protocol string {{.Param "debian-mirror-protocol"}}
+        d-i mirror/http/hostname string {{.Param "debian-mirror-hostname"}}
+        d-i mirror/http/directory string {{ .Param "debian-mirror-directory"}}
+        {{end -}}
+        d-i mirror/country string manual
+        {{range .InstallRepos -}}
+        {{ .Install }}
+        {{end -}}
+
+        {{if .ParamExists "proxy-servers" -}}
+        d-i mirror/http/proxy string {{index (.Param "proxy-servers") 0}}
+        {{else -}}
+        d-i mirror/http/proxy string
+        {{end -}}
+
+        # Clock
+        d-i clock-setup/utc boolean true
+        {{if .ParamExists "ntp-servers" -}}
+        d-i clock-setup/ntp boolean true
+        d-i clock-setup/ntp-server string {{index (.Param "ntp-servers") 0}}
+        {{else -}}
+        d-i clock-setup/ntp boolean false
+        {{end -}}
+        d-i time/zone string UTC
+
+        # Partitioner Label Default (GPT)
+        d-i partman/choose_label string gpt
+        d-i partman-basicfilesystems/choose_label string gpt
+        d-i partman-partitioning/choose_label string gpt
+        d-i partman/default_label string gpt
+        d-i partman-basicfilesystems/default_label string gpt
+        d-i partman-partitioning/default_label string gpt
+        # Partitioner Prompt Confirmations
+        d-i partman-auto/purge_lvm_from_device boolean true
+        d-i partman-md/confirm boolean true
+        d-i partman-md/device_remove_md boolean true
+        d-i partman-md/confirm_nochanges boolean true
+        d-i partman-md/confirm_nooverwrite boolean true
+        d-i partman-lvm/confirm boolean true
+        d-i partman-lvm/device_remove_lvm boolean true
+        d-i partman-lvm/device_remove_lvm_span boolean true
+        d-i partman-lvm/confirm_nochanges boolean true
+        d-i partman-lvm/confirm_nooverwrite boolean true
+        d-i partman-basicfilesystems/no_swap boolean false
+        #Partitioning Scheme
+        {{if .ParamExists "part-scheme" -}}
+        {{$templateName := (printf "part-scheme-%s.tmpl" (.Param "part-scheme")) -}}
+        {{.CallTemplate $templateName .}}
+        {{else -}}
+        {{template "part-scheme-default.tmpl" .}}
+        {{end -}}
+        d-i partman/confirm_write_new_label boolean true
+        d-i partman/choose_partition select finish
+        d-i partman/confirm boolean true
+        d-i partman/confirm_nooverwrite boolean true
+
+        {{if (and (eq "ubuntu" .Env.OS.Family)  (lt "12.10" .Env.OS.Version)) -}}
+        d-i live-installer/net-image string {{.Env.InstallUrl}}/install/filesystem.squashfs
+        {{end -}}
+
+        # Default User Setup
+        d-i passwd/make-user boolean true
+        d-i passwd/user-uid string {{if .ParamExists "provisioner-default-uid"}}{{.Param "provisioner-default-uid"}}{{else}}1000{{end}}
+        d-i passwd/user-fullname string {{if .ParamExists "provisioner-default-fullname"}}{{.Param "provisioner-default-fullname"}}{{else if .ParamExists "provisioner-default-user"}}{{.Param "provisioner-default-user"}}{{else}}Rocket Skates{{end}}
+        d-i passwd/username string {{if .ParamExists "provisioner-default-user"}}{{.Param "provisioner-default-user"}}{{else}}rocketskates{{end}}
+        d-i passwd/user-password-crypted password {{if .ParamExists "provisioner-default-password-hash"}}{{.Param "provisioner-default-password-hash"}}{{else}}$6$drprocksdrprocks$upAIK9ynEEdFmaxJ5j0QRvwmIu2ruJa1A1XB7GZjrnYYXXyNr4qF9FttxMda2j.cmh.TSiLgn4B/7z0iSHkDC1{{end}}
+        d-i user-setup/allow-password-weak boolean true
+        d-i user-setup/encrypt-home boolean false
+
+        d-i debian-installer/allow_unauthenticated string true
+        tasksel tasksel/first multiselect standard, server
+        d-i pkgsel/include string openssh-server curl efibootmgr {{if .ParamExists "extra-packages"}}{{ range $index, $element := (.Param "extra-packages") }}{{if $index}} {{end}}{{$element}}{{end}}{{end}}
+        d-i pkgsel/update-policy select none
+
+        {{if .ParamExists "ubuntu-hwe-kernel"}}{{if eq (.Param "ubuntu-hwe-kernel") true -}}
+        {{$osver := (printf "%s" .Env.OS.Version) -}}
+        # set the HWE kernel if requested via the Param "ubuntu-hwe-kernel" set to true
+        # WARNING: verify that 'hwe-{{$osver}}' is valid HWE for selected Ubuntu version
+        d-i  base-installer/kernel/altmeta   string hwe-{{$osver}}
+        {{end}}{{end -}}
+
+        {{if .ParamExists "kernel-console"}}d-i debian-installer/add-kernel-opts string {{.Param "kernel-console"}}{{end}}
+        # Completion questions
+        d-i cdrom-detect/eject boolean false
+        d-i finish-install/reboot_in_progress note
+
+        xserver-xorg xserver-xorg/autodetect_monitor boolean true
+        xserver-xorg xserver-xorg/config/monitor/selection-method select medium
+        xserver-xorg xserver-xorg/config/monitor/mode-list select 1024x768 @ 60 Hz
+
+        d-i preseed/late_command string wget {{.Machine.Url}}/post-install.sh -O /target/net-post-install.sh ; chmod +x /target/net-post-install.sh ; /target/net-post-install.sh
+
+      Description: ""
+      Endpoint: ""
+      Errors: []
+      ID: net-seed-buster.tmpl
+      Meta: {}
+      ReadOnly: false
+      Validated: false
+  workflows:
+    debian-10:
+      Available: false
+      Bundle: ""
+      Description: Basic CentOS Install Workflow + Runner
+      Documentation: |
+        This workflow includes the DRP Runner in CentOS provisioning process for DRP.
+
+        After the install completes, the workflow installs the runner
+        in a waiting state so that DRP will automatically detect and start a
+        new workflow if the Machine.Workflow is updated.
+
+        NOTE: To enable, upload the CentOS ISO as per the centos-7 BootEnv
+      Endpoint: ""
+      Errors: null
+      Meta:
+        color: green
+        icon: download
+        title: RackN Content
+      Name: debian-10
+      ReadOnly: false
+      Stages:
+      - debian-10-install
+      - runner-service
+      - finish-install
+      - complete
+      Validated: false
